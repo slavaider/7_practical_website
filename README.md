@@ -1,4 +1,4 @@
-# 6_vue_resourse_vuex
+# 7
 
 ## Project setup
 ```
