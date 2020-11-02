@@ -81,9 +81,10 @@
                     const ad = {
                         title: this.title,
                         description: this.description,
-                        promo: this.promo
+                        promo: this.promo,
+                        src: 'https://picsum.photos/500/300?image=1'
                     }
-                    console.log(ad)
+                    this.$store.dispatch('createAd', ad)
                 }
             }
         }

@@ -3,14 +3,15 @@
         <v-layout row>
             <v-flex xs12>
                 <v-card>
-                    <v-img height="300px" src='https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'></v-img>
+                    <!--suppress HtmlUnknownTarget -->
+                    <v-img height="300px" :src="ad.src"></v-img>
                     <v-card-text>
-                        <h1 class="text--primary">lorem</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo, vitae!</p>
+                        <h1 class="text--primary">{{ad.title}}</h1>
+                        <p>{{ad.description}}</p>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="warning" flat>Edit</v-btn>
+                        <v-btn color="warning" text>Edit</v-btn>
                         <v-btn color="success">Buy</v-btn>
                     </v-card-actions>
                 </v-card>
@@ -21,7 +22,14 @@
 
 <script>
     export default {
-        name: "Ad"
+        props: ['id'],
+        name: "Ad",
+        computed: {
+            ad() {
+                const id = this.id;
+                return this.$store.getters.ad_by_id(id)
+            }
+        }
     }
 </script>
 

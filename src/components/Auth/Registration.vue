@@ -32,6 +32,7 @@
                                     :rules="passwordRules"
                                     :counter="6"
                                     required
+                                    autocomplete
                             >
                             </v-text-field>
                             <v-text-field
@@ -42,13 +43,20 @@
                                     type="password"
                                     :rules="Confirm_Password_Rules"
                                     required
+                                    autocomplete
                             >
                             </v-text-field>
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn :disabled="!valid" type="submit" @click="Submit" color="primary">Create Account</v-btn>
+                        <v-btn :disabled="!valid"
+                               type="submit"
+                               @click="Submit"
+                               :loading="loading"
+                               color="primary"
+                        >Create Account
+                        </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -80,6 +88,11 @@
 
             }
         },
+        computed: {
+            loading() {
+                return this.$store.getters.loading
+            }
+        },
         methods: {
             Submit() {
                 if (this.$refs.form.validate()) {
@@ -87,7 +100,10 @@
                         email: this.email,
                         password: this.password
                     }
-                    console.log(user)
+                    this.$store.dispatch('registerUser', user).then(() => {
+                            this.$router.push('/')
+                        }
+                    ).catch(error => console.log(error))
                     this.$refs.form.reset()
                 }
             }

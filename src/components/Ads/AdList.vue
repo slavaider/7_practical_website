@@ -3,10 +3,11 @@
         <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
                 <h1 class="text--secondary mb-3">My ads</h1>
-                <v-card class="elevation-10 mb-3" v-for="ad in ads" :key="ad.id">
+                <v-card class="elevation-10 mb-3" v-for="ad in my_ads" :key="ad.id">
                     <v-layout rpw>
                         <v-flex xs4>
-                            <v-img :src="ad.srcImg" height="160px"></v-img>
+                            <!--suppress HtmlUnknownTarget -->
+                            <v-img :src="ad.src" height="160px"></v-img>
                         </v-flex>
                         <v-flex xs8>
                             <v-card-text>
@@ -28,22 +29,9 @@
 <script>
     export default {
         name: "AddList",
-        data() {
-            return {
-                ads: [
-                    {
-                        title: 'First Ad',
-                        description: 'First Ad',
-                        srcImg: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-                        promo: false,
-                        id: '1'
-                    }, {
-                        title: 'First Ad',
-                        description: 'First Ad',
-                        srcImg: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-                        promo: false,
-                        id: '2'
-                    }]
+        computed: {
+            my_ads() {
+                return this.$store.getters.get_ads
             }
         }
     }

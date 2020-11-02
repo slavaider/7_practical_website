@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <template>
     <div>
         <v-container fluid>
@@ -8,9 +9,9 @@
                             show-arrows-on-hover
                     >
                         <v-carousel-item
-                                v-for="ad in ads"
+                                v-for="ad in promo_ads"
                                 :key="ad.i"
-                                :src="ad.srcImg"
+                                :src="ad.src"
                         >
                             <div class="car-link">
                                 <v-btn class="error" :to="'ad/'+ad.id">{{ad.title}}</v-btn>
@@ -34,7 +35,7 @@
                     >
                         <v-img
                                 height="200px"
-                                :src="ad.srcImg"
+                                :src="ad.src"
                         ></v-img>
 
                         <v-card-title primary-title>
@@ -46,7 +47,7 @@
 
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn flat :to="'ad/'+ad.id">Open</v-btn>
+                            <v-btn text :to="'ad/'+ad.id">Open</v-btn>
                             <v-btn raised class="primary">Buy</v-btn>
                         </v-card-actions>
                     </v-card>
@@ -58,35 +59,14 @@
 
 <script>
     export default {
-        data() {
-            return {
-                ads: [
-                    {
-                        title: 'First Ad',
-                        description: 'First Ad',
-                        srcImg: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-                        promo: false,
-                        id: '1'
-                    },
-                    {
-                        title: 'Second Ad',
-                        description: 'Second Ad',
-                        srcImg: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-                        promo: true,
-                        id: '2'
-                    },
-                    {
-                        title: 'Third Ad',
-                        description: 'Third Ad',
-                        srcImg: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-                        promo: true,
-                        id: '3'
-                    }
-                ],
-
+        computed: {
+            promo_ads() {
+                return this.$store.getters.promo_ads
+            },
+            ads() {
+                return this.$store.getters.get_ads
             }
-        },
-        props: {},
+        }
     };
 </script>
 

@@ -17,7 +17,7 @@ export default new VueRouter({
         {path: "/orders", component: Orders},
         {path: "/new", component: NewAdd},
         {path: "/list", component: AdList},
-        {path: '/ad/:id', component: Ad}
+        {path: '/ad/:id', props: true, component: Ad}
     ],
     mode: "history",
 });
