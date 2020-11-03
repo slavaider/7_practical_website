@@ -52,6 +52,7 @@
                     <v-flex xs12 class="py-3 px-3">
                         <v-spacer></v-spacer>
                         <v-btn
+                                :loading="loading"
                                 :disabled="!valid"
                                 color="success"
                                 @click="createAdd"
@@ -84,8 +85,15 @@
                         promo: this.promo,
                         src: 'https://picsum.photos/500/300?image=1'
                     }
-                    this.$store.dispatch('createAd', ad)
+                    this.$store.dispatch('createAd', ad).then(() => {
+                        this.$router.push('/list')
+                    }).catch(error => console.log(error))
                 }
+            }
+        },
+        computed: {
+            loading() {
+                return this.$store.getters.loading
             }
         }
     }

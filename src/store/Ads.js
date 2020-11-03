@@ -1,3 +1,16 @@
+import firebase from "firebase";
+
+class Ad {
+    constructor(title, description, owner_id, src, promo = false, id = null) {
+        this.title = title;
+        this.description = description;
+        this.owner_id = owner_id;
+        this.src = src;
+        this.promo = promo;
+        this.id = id;
+    }
+}
+
 export default {
     state: {
         ads: [
@@ -30,9 +43,24 @@ export default {
         }
     },
     actions: {
-        createAd({commit}, payload) {
-            payload.id = '123'
-            commit('createAd', payload)
+        async createAd({commit, getters}, payload) {
+            commit('clearError')
+            commit('setLoading', true)
+            try {
+                const newAd = new Ad(
+                    payload.title,
+                    payload.description,
+                    getters.user.id,
+                    payload.src,
+                    payload.promo);
+                const ad = await firebase.database.call('itc-ads-b1138').ref('ads').push(newAd)
+                commit('setLoading', false)
+                commit('createAd', {...newAd, id: ad.key});
+            } catch (error) {
+                commit('setError', error)
+                commit('setLoading', false)
+                throw error
+            }
         }
     },
     getters: {

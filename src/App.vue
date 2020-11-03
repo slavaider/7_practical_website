@@ -10,6 +10,14 @@
                         <v-list-item-title v-text="link.title"></v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item v-if="is_user_logged_in" exact active-class="active" @click="onLogout">
+                    <v-list-item-icon>
+                        <v-icon>exit_to_app</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title v-text="'Logout'"></v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
             </v-list>
         </v-navigation-drawer>
 
@@ -26,6 +34,10 @@
                     <v-icon left>{{link.icon}}</v-icon>
                     {{link.title}}
                 </v-btn>
+                <v-btn v-if="is_user_logged_in" @click="onLogout" text>
+                    Logout
+                    <v-icon right>exit_to_app</v-icon>
+                </v-btn>
             </v-toolbar-items>
         </v-app-bar>
 
@@ -34,6 +46,27 @@
                 <router-view></router-view>
             </v-container>
         </v-main>
+        <template v-if="error">
+            <v-snackbar
+                    color="error"
+                    multi-line
+                    :timeout="5000"
+                    @input="closeError"
+                    :value="true"
+            >
+                {{error}}
+                <template v-slot:action="{ attrs }">
+                    <v-btn
+                            dark
+                            text
+                            v-bind="attrs"
+                            @click="closeError"
+                    >
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
+        </template>
     </v-app>
 </template>
 
@@ -41,14 +74,37 @@
     export default {
         data() {
             return {
-                drawer: null,
-                links: [
+                drawer: null
+            }
+        },
+        computed: {
+            error() {
+                return this.$store.getters.error
+            },
+            is_user_logged_in() {
+                return this.$store.getters.is_user_logged_in
+            },
+            links() {
+                if (this.is_user_logged_in) {
+                    return [
+                        {title: 'Orders', icon: 'bookmark_border', url: '/orders'},
+                        {title: 'New ad', icon: 'note_add', url: '/new'},
+                        {title: 'My ads', icon: 'list', url: '/list'},
+                    ]
+                }
+                return [
                     {title: 'Login', icon: 'lock', url: '/login'},
                     {title: 'Registration', icon: 'face', url: '/registration'},
-                    {title: 'Orders', icon: 'bookmark_border', url: '/orders'},
-                    {title: 'New ad', icon: 'note_add', url: '/new'},
-                    {title: 'My ads', icon: 'list', url: '/list'},
                 ]
+            }
+        },
+        methods: {
+            closeError() {
+                this.$store.dispatch('setError', null)
+            },
+            onLogout() {
+                this.$store.dispatch('LogoutUser')
+                this.$router.push('/')
             }
         }
     }

@@ -20,6 +20,7 @@
                                     label="Email"
                                     type="email"
                                     :rules="emailRules"
+                                    autocomplete="username"
                                     required
                             >
                             </v-text-field>
@@ -32,7 +33,7 @@
                                     :rules="passwordRules"
                                     :counter="6"
                                     required
-                                    autocomplete
+                                    autocomplete="password"
                             >
                             </v-text-field>
                             <v-text-field
@@ -43,7 +44,7 @@
                                     type="password"
                                     :rules="Confirm_Password_Rules"
                                     required
-                                    autocomplete
+                                    autocomplete="password"
                             >
                             </v-text-field>
                         </v-form>
@@ -103,7 +104,8 @@
                     this.$store.dispatch('registerUser', user).then(() => {
                             this.$router.push('/')
                         }
-                    ).catch(error => console.log(error))
+                    ).catch(() => {
+                    })
                     this.$refs.form.reset()
                 }
             }
