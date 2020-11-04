@@ -13,49 +13,54 @@ class Ad {
 
 export default {
     state: {
-        ads: [
-            {
-                title: 'First Ad',
-                description: 'First Ad',
-                src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-                promo: false,
-                id: '1'
-            },
-            {
-                title: 'Second Ad',
-                description: 'Second Ad',
-                src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-                promo: true,
-                id: '2'
-            },
-            {
-                title: 'Third Ad',
-                description: 'Third Ad',
-                src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-                promo: true,
-                id: '3'
-            }
-        ],
+        ads: []
     },
     mutations: {
         createAd(state, payload) {
             state.ads.push(payload);
+        },
+        fetchAds(state, payload) {
+            state.ads = payload;
         }
     },
     actions: {
         async createAd({commit, getters}, payload) {
             commit('clearError')
             commit('setLoading', true)
+            const image = payload.image
             try {
                 const newAd = new Ad(
                     payload.title,
                     payload.description,
                     getters.user.id,
-                    payload.src,
+                    '',
                     payload.promo);
                 const ad = await firebase.database.call('itc-ads-b1138').ref('ads').push(newAd)
+                const imageExtension = image.name.slice(image.name.lastIndexOf('.'));
+                const fileData = await firebase.storage.call('itc-ads-b1138').ref(`ads/${ad.key}${imageExtension}`).put(image)
+                const src = await fileData.ref.getDownloadURL()
+                await firebase.database.call('itc-ads-b1138').ref('ads').child(ad.key).update({src})
                 commit('setLoading', false)
-                commit('createAd', {...newAd, id: ad.key});
+                commit('createAd', {...newAd, id: ad.key, src});
+            } catch (error) {
+                commit('setError', error)
+                commit('setLoading', false)
+                throw error
+            }
+        },
+        async fetchAds({commit}) {
+            commit('clearError')
+            commit('setLoading', true)
+            const result_ads = []
+            try {
+                const firebase_values = await firebase.database.call('itc-ads-b1138').ref('ads').once('value')
+                const ads = firebase_values.val()
+                Object.keys(ads).forEach(key => {
+                    const ad = ads[key]
+                    result_ads.push(new Ad(ad.title, ad.description, ad.owner_id, ad.src, ad.promo, key))
+                })
+                commit('fetchAds', result_ads)
+                commit('setLoading', false)
             } catch (error) {
                 commit('setError', error)
                 commit('setLoading', false)

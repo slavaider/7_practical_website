@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueResource from 'vue-resource'
-import vuelidate from 'vuelidate'
 import vuetify from './plugins/vuetify'
 import VueRouter from 'vue-router'
 import firebase from 'firebase'
@@ -15,7 +14,6 @@ Vue.config.productionTip = false
 // Use
 Vue.use(VueRouter)
 Vue.use(VueResource)
-Vue.use(vuelidate)
 
 
 new Vue({
@@ -36,8 +34,9 @@ new Vue({
         })
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                this.$store.dispatch('AutoLoginUser', user)
+                this.$store.dispatch('AutoLoginUser', user).catch(error => console.log(error))
             }
         })
+        this.$store.dispatch('fetchAds')
     }
 }).$mount('#app')
