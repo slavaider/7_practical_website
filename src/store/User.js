@@ -28,11 +28,11 @@ export default {
                 commit('setLoading', false)
             } catch (error) {
                 commit('setLoading', false)
-                commit('setError', error)
+                commit('setError', error.message)
                 throw error
             }
         },
-        async loginUser({commit}, {email, password}) {
+        async loginUser({commit, getters}, {email, password}) {
             commit('clearError')
             commit('setLoading', true)
             try {
@@ -41,8 +41,10 @@ export default {
                 commit('setLoading', false)
             } catch (error) {
                 commit('setLoading', false)
-                commit('setError', error)
+                commit('setError', error.message)
                 throw error
+            } finally {
+                console.log(getters.user.id)
             }
         },
         LogoutUser({commit}) {
@@ -54,7 +56,7 @@ export default {
         user(state) {
             return state.user;
         },
-        is_user_logged_in(state) {
+        isUserLoggedIn(state) {
             return state.user !== null
         }
     },

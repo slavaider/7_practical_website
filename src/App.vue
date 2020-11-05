@@ -10,7 +10,7 @@
                         <v-list-item-title v-text="link.title"></v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item v-if="is_user_logged_in" exact active-class="active" @click="onLogout">
+                <v-list-item v-if="isUserLoggedIn" exact active-class="active" @click="onLogout">
                     <v-list-item-icon>
                         <v-icon>exit_to_app</v-icon>
                     </v-list-item-icon>
@@ -34,7 +34,7 @@
                     <v-icon left>{{link.icon}}</v-icon>
                     {{link.title}}
                 </v-btn>
-                <v-btn v-if="is_user_logged_in" @click="onLogout" text>
+                <v-btn v-if="isUserLoggedIn" @click="onLogout" text>
                     Logout
                     <v-icon right>exit_to_app</v-icon>
                 </v-btn>
@@ -81,11 +81,11 @@
             error() {
                 return this.$store.getters.error
             },
-            is_user_logged_in() {
-                return this.$store.getters.is_user_logged_in
+            isUserLoggedIn () {
+                return this.$store.getters.isUserLoggedIn
             },
             links() {
-                if (this.is_user_logged_in) {
+                if (this.isUserLoggedIn) {
                     return [
                         {title: 'Orders', icon: 'bookmark_border', url: '/orders'},
                         {title: 'New ad', icon: 'note_add', url: '/new'},
@@ -96,16 +96,20 @@
                     {title: 'Login', icon: 'lock', url: '/login'},
                     {title: 'Registration', icon: 'face', url: '/registration'},
                 ]
+
             }
-        },
+        }
+        ,
         methods: {
             closeError() {
                 this.$store.dispatch('setError', null)
-            },
+            }
+            ,
             onLogout() {
                 this.$store.dispatch('LogoutUser')
                 this.$router.push('/')
             }
         }
+
     }
 </script>

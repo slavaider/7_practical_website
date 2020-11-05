@@ -21,9 +21,28 @@ export default {
         },
         fetchAds(state, payload) {
             state.ads = payload;
+        },
+        updateAd(state, {title, description, id}) {
+            const ad = state.ads.find(a => {
+                return a.id === id
+            })
+            ad.title = title
+            ad.description = description
         }
     },
     actions: {
+        async updateAd({commit}, {title, description, id}) {
+            commit('clearError')
+            commit('setLoading', true)
+            try {
+                await firebase.database.call('itc-ads-b1138').ref('ads').child(id).update({title, description})
+                commit('updateAd', {title, description, id})
+                commit('setLoading', false)
+            } catch (error) {
+                commit('setError,error')
+                commit('setLoading', false)
+            }
+        },
         async createAd({commit, getters}, payload) {
             commit('clearError')
             commit('setLoading', true)
@@ -75,8 +94,10 @@ export default {
         promo_ads(state) {
             return state.ads.filter((ad) => ad.promo);
         },
-        my_ads(state) {
-            return state.ads;
+        my_ads(state,getters) {
+            return state.ads.filter(ad => {
+                return ad.owner_id === getters.user.id
+            })
         },
         ad_by_id(state) {
             return adId => {

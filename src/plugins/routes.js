@@ -18,7 +18,7 @@ export default new VueRouter({
         {path: "/orders", component: Orders, beforeEnter: auth_guard},
         {path: "/new", component: NewAdd, beforeEnter: auth_guard},
         {path: "/list", component: AdList, beforeEnter: auth_guard},
-        {path: '/ad/:id', props: true, component: Ad, beforeEnter: auth_guard},
+        {path: '/ad/:id', props: true, component: Ad},
     ],
     mode: "history",
 });

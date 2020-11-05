@@ -11,8 +11,8 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <app-edit-modal :ad="ad"></app-edit-modal>
-                        <v-btn class="ml-2" color="success">Buy</v-btn>
+                        <app-edit-modal :ad="ad" v-if="owner"></app-edit-modal>
+                        <app-buy-model :ad="ad"></app-buy-model>
                     </v-card-actions>
                 </v-card>
                 <div v-else>
@@ -50,6 +50,9 @@
             },
             loading() {
                 return this.$store.getters.loading
+            },
+            owner() {
+                return this.ad.owner_id === this.$store.getters.user.id
             }
         }
     }

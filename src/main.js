@@ -4,6 +4,7 @@ import VueResource from 'vue-resource'
 import vuetify from './plugins/vuetify'
 import VueRouter from 'vue-router'
 import firebase from 'firebase'
+import buyModel from './Shared/BuyModel'
 // My router
 import router from './plugins/routes'
 //Store
@@ -11,6 +12,7 @@ import store from './store/index'
 
 Vue.config.productionTip = false
 
+Vue.component('app-buy-model', buyModel)
 // Use
 Vue.use(VueRouter)
 Vue.use(VueResource)

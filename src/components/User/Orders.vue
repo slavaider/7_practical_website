@@ -1,7 +1,7 @@
 <template>
     <v-container class="Orders">
         <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex v-if="!loading && orders.length !== 0" xs12 sm6 offset-sm3>
                 <v-card
                         class="mx-auto"
                         max-width="400"
@@ -31,43 +31,41 @@
                     </v-list>
                 </v-card>
             </v-flex>
+            <v-flex v-else-if="!loading && orders.length === 0" xs12 class="text-center">
+                <h1 class="text--primary">You dont have orders</h1>
+            </v-flex>
+            <v-flex v-else xs12 class="text-center">
+                <v-progress-circular
+                        :size="100"
+                        :width="4"
+                        indeterminate
+                        color="purple"
+                ></v-progress-circular>
+            </v-flex>
         </v-layout>
     </v-container>
 </template>
 <script>
     export default {
         name: "Orders",
-        data() {
-            return {
-                orders: [
-                    {
-                        id: '1',
-                        name: 'Lol1',
-                        phone: '7900000000',
-                        adId: '1',
-                        done: false
-                    },
-                    {
-                        id: '2',
-                        name: 'Lol2',
-                        phone: '7900000001',
-                        adId: '2',
-                        done: false
-                    },
-                    {
-                        id: '3',
-                        name: 'Lol2',
-                        phone: '7900000002',
-                        adId: '3',
-                        done: false
-                    }
-                ]
-            }
-        },
         methods: {
             markDone(order) {
-                order.done = true
+                this.$store.dispatch('markOrder', order.id).then(() => {
+                    order.done = true
+                }).catch(() => {
+                })
             }
+        },
+        computed: {
+            loading() {
+                return this.$store.getters.loading
+            },
+            orders() {
+                return this.$store.getters.orders
+            }
+        },
+        created() {
+            return this.$store.dispatch('fetchOrders')
         }
     }
 </script>
