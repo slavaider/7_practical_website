@@ -9,7 +9,6 @@
                     </v-toolbar>
                     <v-card-text>
                         <v-form
-                                @submit.prevent="Submit"
                                 ref="form"
                                 v-model="valid"
                         >

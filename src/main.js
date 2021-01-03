@@ -34,12 +34,11 @@ new Vue({
             appId: "1:32393797502:web:784ac5a4ea9779af1fdd2f",
             measurementId: "G-SXZQBNXYW0"
         })
-        //time break
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 this.$store.dispatch('AutoLoginUser', user).catch(error => console.log(error))
             }
         })
-        this.$store.dispatch('fetchAds')
+        this.$store.dispatch('fetchAds').catch(error => console.log(error))
     }
 }).$mount('#app')

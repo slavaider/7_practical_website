@@ -52,7 +52,11 @@
                 return this.$store.getters.loading
             },
             owner() {
-                return this.ad.owner_id === this.$store.getters.user.id
+                if (this.$store.getters.user === null) {
+                    return false
+                } else {
+                    return this.ad.owner_id === this.$store.getters.user.id
+                }
             }
         }
     }

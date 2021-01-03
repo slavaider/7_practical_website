@@ -32,7 +32,7 @@ export default {
                 throw error
             }
         },
-        async loginUser({commit, getters}, {email, password}) {
+        async loginUser({commit}, {email, password}) {
             commit('clearError')
             commit('setLoading', true)
             try {
@@ -43,12 +43,10 @@ export default {
                 commit('setLoading', false)
                 commit('setError', error.message)
                 throw error
-            } finally {
-                console.log(getters.user.id)
             }
         },
-        LogoutUser({commit}) {
-            firebase.auth().signOut()
+        async LogoutUser({commit}) {
+            await firebase.auth().signOut()
             commit('setUser', null)
         }
     },

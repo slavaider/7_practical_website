@@ -8,7 +8,7 @@
                         <v-spacer></v-spacer>
                     </v-toolbar>
                     <v-card-text>
-                        <v-form @submit.prevent="Submit"
+                        <v-form
                                 ref="form"
                                 v-model="valid">
                             <v-text-field
@@ -75,12 +75,9 @@
                         password: this.password
                     }
 
-                    this.$store.dispatch('loginUser', user)
-                        .then(() => {
-                            this.$router.push('/')
-                        }).catch(() => {
+                    this.$store.dispatch('loginUser', user).then(() => {
+                        this.$router.push('/')
                     })
-
                     this.$refs.form.reset()
                 }
             }
